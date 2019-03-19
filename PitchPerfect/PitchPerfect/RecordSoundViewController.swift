@@ -17,20 +17,11 @@ class RecordSoundViewController: UIViewController, AVAudioRecorderDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        stopRecordingButton.isEnabled=false;
+        stopRecordingButton.isEnabled=false
+
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-      
-    }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-   
+
+
     @IBAction func recordAudio(_ sender: Any) {
         setEnabled(recording: true)
         let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask, true)[0] as String
@@ -60,7 +51,9 @@ class RecordSoundViewController: UIViewController, AVAudioRecorderDelegate{
         performSegue(withIdentifier: "stopRecording", sender: audioRecorder.url)
         }
         else{
-            print("Recording was not successful")
+            let alert = UIAlertController(title: "Recording Error", message: "Record was not successful", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
@@ -73,15 +66,14 @@ class RecordSoundViewController: UIViewController, AVAudioRecorderDelegate{
     }
     
     func setEnabled(recording: Bool){
+        recordingLabel.text = recording ? "Recording in Progress" : "Tap to Record"
         if recording{
-            recordingLabel.text = "Recording in progress"
-            stopRecordingButton.isEnabled = true
-            recodButton.isEnabled = false
+            stopRecordingButton.isEnabled = recording
+            recodButton.isEnabled = !recording
         }
         else{
-            recodButton.isEnabled = true
-            stopRecordingButton.isEnabled = false
-            recordingLabel.text = "Tap to Record"
+            recodButton.isEnabled = recording
+            stopRecordingButton.isEnabled = !recording
         }
     }
     
